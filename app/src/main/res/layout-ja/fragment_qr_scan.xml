@@ -13,12 +13,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:text="把二维码/条码放入\n框中, 即可自动扫描"
+                    android:textSize="14sp"
                     android:layout_marginStart="48dp"
-                    android:layout_marginTop="16dp"
-                    android:text="Place the QR code/barcode\n into the box, and it will be\n automatically scanned"
                     android:textColor="@color/WHITESMOKE"
-                    android:textSize="24sp" />
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="center"
+                    />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -26,7 +27,7 @@
                     android:gravity="center"
                     >
 
-                        <!--Preview interface-->
+                        <!--预览界面-->
                         <com.serenegiant.widget.UVCCameraTextureView
                             android:id="@+id/camera_view_qr"
                             android:layout_width="240dp"
@@ -34,7 +35,7 @@
                             android:gravity="center"
                             />
 
-                        <!--Blue border-->
+                        <!--蓝色边框-->
                         <ImageView
                             android:id="@+id/frame_image"
                             android:layout_width="wrap_content"
@@ -45,7 +46,7 @@
                             android:layout_alignRight="@+id/camera_view_qr"
                             android:src="@drawable/border_camera"/>
 
-                        <!--Animation-->
+                        <!--动画-->
                         <ImageView
                             android:id="@+id/iv_qr_scan_animate"
                             android:layout_margin="5dp"

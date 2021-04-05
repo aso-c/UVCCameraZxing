@@ -26,4 +26,6 @@
 -->
 <resources>
     <string name="app_name">USBCameraZxing</string>
+    <string name="app_menu_title">QR code recognition</string>
+    <string name="err_fail_parse">Failed to parse QR code</string>
 </resources>

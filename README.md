@@ -3,10 +3,13 @@ QR code recognition with USB serial camera
 
 [![Build Status](https://travis-ci.org/jp1017/UVCCameraZxing.svg?branch=master)](https://travis-ci.org/jp1017/UVCCameraZxing)
 
+## 2.40.1
+Base translation interfase to english
+
 ## 2.40
 1. Upgrade libuvccamera library
-1. Upgrade zxing library to 3.3.2
-1. Generate color QR code
+2. Upgrade zxing library to 3.3.2
+3. Generate color QR code
 
 The usb camera recognizes the QR code, involving Android technology:
 

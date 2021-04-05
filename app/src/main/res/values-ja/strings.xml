@@ -26,4 +26,6 @@
 -->
 <resources>
     <string name="app_name">USBカメラテスト4</string>
+    <string name="app_menu_title">二维码识别</string>
+    <string name="err_fail_parse">解析二维码失败</string>
 </resources>

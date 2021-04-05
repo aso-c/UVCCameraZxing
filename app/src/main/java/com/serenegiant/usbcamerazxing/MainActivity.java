@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private Toolbar mToolbar;
 
-	//选择图片后的识别码
+	// The identification code after selecting the picture
 	private static final int REQUEST_QR_IMAGE = 480;
 
 	@Override
@@ -58,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
 		mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
-		mToolbar.setTitle("二维码识别");
+		//mToolbar.setTitle("二维码识别");
+		//mToolbar.setTitle("QR code recognition");
+		mToolbar.setTitle(R.string.app_menu_title);
+		//mToolbar.setTitle(R.string.app_name);
 		mToolbar.setTitleTextColor(Color.WHITE);
 		setSupportActionBar(mToolbar);
 		mToolbar.setNavigationIcon(R.drawable.ic_actionbar_back);
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	/**
-	 * 相册选择后处理
+	 * Post-processing of album selection
 	 * @param requestCode
 	 * @param resultCode
 	 * @param data
@@ -101,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
 						@Override
 						public void onAnalyzeFailed() {
-							Toast.makeText(MainActivity.this, ("解析二维码失败"), Toast.LENGTH_LONG).show();
+							Toast.makeText(MainActivity.this, (R.string.err_fail_parse/*"解析二维码失败"*/), Toast.LENGTH_LONG).show();
 						}
 					});
 				} catch (Exception e) {
@@ -112,8 +115,8 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	/**
-	 * actionbar右侧添加菜单
-	 * @param menu 要添加的菜单
+	 * actionbar: Add menu on the right
+	 * @param menu Menu to be added
 	 * @return
 	 */
 	@Override
@@ -129,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 				finish();
 				break;
 
-			//相册选择
+			// Album selection
 			case R.id.menu_pic_select:
 				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 				intent.addCategory(Intent.CATEGORY_OPENABLE);
