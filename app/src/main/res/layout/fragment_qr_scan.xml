@@ -7,52 +7,51 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="490dp"
+                    android:layout_height="113dp"
                     android:layout_gravity="center"
-                    android:layout_marginStart="48dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="36dp"
                     android:text="Place the QR code/barcode\n into the box, and it will be\n automatically scanned"
+                    android:textAlignment="center"
                     android:textColor="@color/WHITESMOKE"
                     android:textSize="24sp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:gravity="center"
-                    >
+                    android:gravity="center">
 
                         <!--Preview interface-->
                         <com.serenegiant.widget.UVCCameraTextureView
                             android:id="@+id/camera_view_qr"
                             android:layout_width="240dp"
                             android:layout_height="240dp"
-                            android:gravity="center"
-                            />
+                            android:gravity="center" />
 
                         <!--Blue border-->
                         <ImageView
                             android:id="@+id/frame_image"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignTop="@+id/camera_view_qr"
-                            android:layout_alignBottom="@+id/camera_view_qr"
                             android:layout_alignLeft="@+id/camera_view_qr"
+                            android:layout_alignTop="@+id/camera_view_qr"
                             android:layout_alignRight="@+id/camera_view_qr"
-                            android:src="@drawable/border_camera"/>
+                            android:layout_alignBottom="@+id/camera_view_qr"
+                            android:src="@drawable/border_camera" />
 
                         <!--Animation-->
                         <ImageView
                             android:id="@+id/iv_qr_scan_animate"
-                            android:layout_margin="5dp"
                             android:layout_width="240dp"
                             android:layout_height="20dp"
-                            android:src="@drawable/scan_image"
-                            />
+                            android:layout_margin="5dp"
+                            android:src="@drawable/scan_image" />
 
                 </RelativeLayout>
 

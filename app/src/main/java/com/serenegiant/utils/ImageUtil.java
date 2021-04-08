@@ -28,19 +28,19 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
 /**
- * 文 件 名: ImageUtil
- * 创 建 人: 蒋朋
- * 创建日期: 16-8-22 11:36
- * 描    述: 图片处理工具类
- * 修 改 人:
- * 修改时间：
- * 修改备注：
+ * File name: ImageUtil
+ * Creator: Jiang Peng
+ * Creation Date: 16-8-22 11:36
+ * Description: Image processing tools
+ * Modifier: A.A.Solomatov
+ * Modification date: 07.04.21
+ * Modification notes: Comment translation to english
  */
 
 public class ImageUtil {
 
     /**
-     * 根据文件路径，压缩图片，用于二维码扫描
+     * According to the file path, compress the picture for QR code scanning
      * @param path
      * @return
      */
@@ -59,7 +59,8 @@ public class ImageUtil {
     }
 
     /**
-     * 根据Uri获取图片绝对路径，解决Android4.4以上版本Uri转换
+     * Obtain the absolute path of the picture according to Uri,
+     * and solve the Uri conversion of Android 4.4 and above
      *
      * @param context
      * @param imageUri
