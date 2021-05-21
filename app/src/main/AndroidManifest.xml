@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.serenegiant.usbcamerazxing"
     android:versionName="@string/app_version_name"
-    android:versionCode="204001" >
+    android:versionCode="204002" >
 
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -24,6 +24,10 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.serenegiant.usbcamerazxing.SCAN"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
 			<intent-filter>
 				<action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
