@@ -27,8 +27,8 @@
 <resources>
     <string name="app_name">USBCameraZxing</string>
     <string name="app_label">%1$s   == build ver.%2$s, by %3$s from %4$s ==</string>
-    <string name="app_version_name" translatable="false">v.2.40.3.3</string>
-    <string name="app_version_code" translatable="false">2.400303</string>
+    <string name="app_version_name" translatable="false">v.2.40.3.4</string>
+    <string name="app_version_code" translatable="false">2.400304</string>
     <string name="app_author" translatable="false">jp1017</string>
     <string name="app_contributor" translatable="false">aso</string>
     <string name="build_date" translatable="false">25.05.21</string>

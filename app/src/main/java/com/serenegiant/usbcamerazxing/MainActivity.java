@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_main);
 
+		Log.i(getString(R.string.app_name), "version " + getString(R.string.app_version_name) + " by " + getString(R.string.build_date));
+		Log.i(getString(R.string.app_name), "application started");
+
 		mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
 		//mToolbar.setTitle("二维码识别");
@@ -120,6 +123,28 @@ public class MainActivity extends AppCompatActivity {
 	}; /* onActivityResult */
 
 	/**
+	 * analyse of the caller intent parameters: is the program
+	 * called as an external client?
+	 * @param caller_intent
+	 * @return
+	 */
+	public boolean isScannerClientCallerIntent(Intent caller_intent)
+	{
+		if (caller_intent == null)
+			Log.w("UVCCameraZxing", "onDestroy: We don't have a Caller Intent");
+		else {
+			Log.w("UVCCameraZxing", "onDestroy: We have a Caller Intent");
+			if (!caller_intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
+				Log.w("UVCCameraZxing", "onDestroy: We called from system launcher");
+			else {
+				Log.w("UVCCameraZxing", "onDestroy: We called from external program for passing result");
+				return true;
+			}; /* else if !caller_intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN") */
+		}; /* if caller_intent == null */
+		return false;
+	}; /* isScannerClientCallerIntent */
+
+	/**
 	 * For Debug purposes only
 	 */
 	@Override
@@ -127,16 +152,18 @@ public class MainActivity extends AppCompatActivity {
 		super.onDestroy();
 
 		Log.w("UVCCameraZxing", "MainActivity: at the onDestroy call, for Debug only purposes");
-		Intent caller_intent = getIntent();
-		if (caller_intent == null)
-			Log.w("UVCCameraZxing", "onDestroy: We don't have a Caller Intent");
-		else {
-			Log.w("UVCCameraZxing", "onDestroy: We have a Caller Intent");
-			if (!caller_intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
-				Log.w("UVCCameraZxing", "onDestroy: We called from system launcher");
-			else
-				Log.w("UVCCameraZxing", "onDestroy: We called from external program for passing result");
-		}; /* if caller_intent == null */
+//		Intent caller_intent = getIntent();
+//		if (caller_intent == null)
+//			Log.w("UVCCameraZxing", "onDestroy: We don't have a Caller Intent");
+//		else {
+//			Log.w("UVCCameraZxing", "onDestroy: We have a Caller Intent");
+//			if (!caller_intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
+//				Log.w("UVCCameraZxing", "onDestroy: We called from system launcher");
+//			else
+//				Log.w("UVCCameraZxing", "onDestroy: We called from external program for passing result");
+//		}; /* if caller_intent == null */
+		//if (isScannerClientCallerIntent(getIntent()))
+		isScannerClientCallerIntent(getIntent());
 
 	}; /* onDestroy */
 
