@@ -125,25 +125,26 @@ public class MainActivity extends AppCompatActivity {
 	/**
 	 * analyse of the caller intent parameters: is the program
 	 * called as an external client?
-	 * @param caller_intent
+	 * @param intent
 	 * @return
 	 */
-	public boolean isScannerClientCallerIntent(Intent caller_intent)
+	public boolean isScannerClientCallerIntent(Intent intent)
 	{
-		if (caller_intent == null)
+		if (intent == null)
 			Log.w("UVCCameraZxing", "onDestroy: We don't have a Caller Intent");
 		else {
 			Log.w("UVCCameraZxing", "onDestroy: We have a Caller Intent");
-			if (!caller_intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
+			if (!intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
 				Log.w("UVCCameraZxing", "onDestroy: We called from system launcher");
 			else {
 				Log.w("UVCCameraZxing", "onDestroy: We called from external program for passing result");
 				return true;
-			}; /* else if !caller_intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN") */
-		}; /* if caller_intent == null */
+			}; /* else if !intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN") */
+		}; /* if intent == null */
 		return false;
 	}; /* isScannerClientCallerIntent */
 
+	private static final boolean MyDEBUG = true;
 	/**
 	 * For Debug purposes only
 	 */
@@ -151,19 +152,11 @@ public class MainActivity extends AppCompatActivity {
 	protected void onDestroy() {
 		super.onDestroy();
 
-		Log.w("UVCCameraZxing", "MainActivity: at the onDestroy call, for Debug only purposes");
-//		Intent caller_intent = getIntent();
-//		if (caller_intent == null)
-//			Log.w("UVCCameraZxing", "onDestroy: We don't have a Caller Intent");
-//		else {
-//			Log.w("UVCCameraZxing", "onDestroy: We have a Caller Intent");
-//			if (!caller_intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
-//				Log.w("UVCCameraZxing", "onDestroy: We called from system launcher");
-//			else
-//				Log.w("UVCCameraZxing", "onDestroy: We called from external program for passing result");
-//		}; /* if caller_intent == null */
-		//if (isScannerClientCallerIntent(getIntent()))
-		isScannerClientCallerIntent(getIntent());
+		if (MyDEBUG) {
+			Log.w("UVCCameraZxing", "MainActivity: at the onDestroy call, for Debug only purposes");
+			//if (isScannerClientCallerIntent(getIntent()))
+			isScannerClientCallerIntent(getIntent());
+		}; /* if MyDEBUG */
 
 	}; /* onDestroy */
 
