@@ -6,7 +6,7 @@
  *
  * Copyright (c) 2014-2015 saki t_saki@serenegiant.com
  *
- * File name: strings.xml
+ * File name: build_strings.xml
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,18 +22,17 @@
  *
  * All files in the folder are under this Apache License, Version 2.0.
  * Files in the jni/libjpeg, jni/libusb, jin/libuvc, jni/rapidjson folder may have a different license, see the respective files.
+ *
+ * Service technical strings for marking & versioning builds
 */
 -->
 <resources>
-    <!--<string name="app_name">USBCameraZxing</string>-->
-    <string name="app_label" translatable="false">%1$s   == build ver.%2$s, by %3$s from %4$s ==</string>
-    <string name="app_version_name" translatable="false">v.2.40.3.5</string>
-    <string name="app_version_code" translatable="false">2.400305</string>
+    <!--<string name="app_label" translatable="false">%1$s   == build ver.%2$s, by %3$s from %4$s ==</string>-->
+    <string name="app_version_name" translatable="false">v.2.40.3.6</string>
+    <string name="app_version_code" translatable="false">2.400306</string>
     <string name="app_author" translatable="false">jp1017</string>
     <string name="app_contributor" translatable="false">aso</string>
     <string name="build_date" translatable="false">25.05.21</string>
     <string name="build_date_value" translatable="false">20210525</string>
     <string name="maven_build" translatable="false">${maven.build.timestamp}</string>
-    <!--<string name="app_menu_title">QR code recognition</string>-->
-    <!--<string name="err_fail_parse">Failed to parse QR code</string>-->
 </resources>

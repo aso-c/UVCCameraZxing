@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 			if (!intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
 				Log.w("UVCCameraZxing", "onDestroy: We called from system launcher");
 			else {
-				Log.w("UVCCameraZxing", "onDestroy: We called from external program for passing result");
+				Log.w("UVCCameraZxing", "onDestroy: We called from external program for fetching result");
 				return true;
 			}; /* else if !intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN") */
 		}; /* if intent == null */
@@ -154,8 +154,15 @@ public class MainActivity extends AppCompatActivity {
 
 		if (MyDEBUG) {
 			Log.w("UVCCameraZxing", "MainActivity: at the onDestroy call, for Debug only purposes");
-			//if (isScannerClientCallerIntent(getIntent()))
-			isScannerClientCallerIntent(getIntent());
+			if (isScannerClientCallerIntent(getIntent()))
+			{
+				Log.w("UVCCameraZxing", "onDestroy: An example of a QR code string has been submitted.");
+				Intent intent = new Intent();
+				intent.putExtra("QRCode", "Example string for checking the scanning QR code result transmission.");
+				setResult(RESULT_OK, intent);
+				finish();
+			}; /* if isScannerClientCallerIntent(getIntent()) */
+			//isScannerClientCallerIntent(getIntent());
 		}; /* if MyDEBUG */
 
 	}; /* onDestroy */

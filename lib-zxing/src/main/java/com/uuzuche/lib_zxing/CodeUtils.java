@@ -21,7 +21,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 /**
- * 二维码扫描工具类
+ * QR code scanning tools
  */
 public class CodeUtils {
     private final static int COLOR_WECHAT = 0xff009900;
@@ -30,22 +30,22 @@ public class CodeUtils {
     public static void analyzeBitmap(Bitmap bitmap, AnalyzeCallback analyzeCallback) {
         MultiFormatReader multiFormatReader = new MultiFormatReader();
 
-        // 解码的参数
+        // Decoded parameters
         Hashtable<DecodeHintType, Object> hints = new Hashtable<>(2);
-        // 可以解析的编码类型
+        // Encoding types that can be parsed
         Vector<BarcodeFormat> decodeFormats = new Vector<>();
-        // 这里设置可扫描的类型，我这里选择了都支持
+        // Set the scannable type here, I chose to support all of them here
         decodeFormats.addAll(DecodeFormatManager.ONE_D_FORMATS);
         decodeFormats.addAll(DecodeFormatManager.QR_CODE_FORMATS);
         decodeFormats.addAll(DecodeFormatManager.DATA_MATRIX_FORMATS);
 
         hints.put(DecodeHintType.POSSIBLE_FORMATS, decodeFormats);
-        // 设置继续的字符编码格式为UTF8
+        // Set the continued character encoding format to UTF8
         // hints.put(DecodeHintType.CHARACTER_SET, "UTF8");
-        // 设置解析配置参数
+        // Set parsing configuration parameters
         multiFormatReader.setHints(hints);
 
-        // 开始对图像资源解码
+        // Start to decode image resources
         Result rawResult = null;
         try {
             rawResult = multiFormatReader.decodeWithState(
@@ -67,15 +67,16 @@ public class CodeUtils {
 
 
     /**
-     * 根据图片路径解析二维码图片工具类
+     * Analyze QR code image tools according to the image path
      *
-     * @param analyzeCallback 解析回调
+     * @param analyzeCallback Parsing callback
      */
 
     public static void analyzeBitmap(String path, AnalyzeCallback analyzeCallback) {
 
         /**
-         * 首先判断图片的大小,若图片过大,则执行图片的裁剪操作,防止OOM
+         * First determine the size of the picture. If the picture is too large,
+         * perform the cropping operation of the picture to prevent OOM
          */
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true; // 先获取原大小
