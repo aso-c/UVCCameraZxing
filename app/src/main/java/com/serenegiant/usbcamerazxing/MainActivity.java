@@ -130,8 +130,13 @@ public class MainActivity extends AppCompatActivity {
 		Intent caller_intent = getIntent();
 		if (caller_intent == null)
 			Log.w("UVCCameraZxing", "onDestroy: We don't have a Caller Intent");
-		else
+		else {
 			Log.w("UVCCameraZxing", "onDestroy: We have a Caller Intent");
+			if (!caller_intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
+				Log.w("UVCCameraZxing", "onDestroy: We called from system launcher");
+			else
+				Log.w("UVCCameraZxing", "onDestroy: We called from external program for passing result");
+		}; /* if caller_intent == null */
 
 	}; /* onDestroy */
 
