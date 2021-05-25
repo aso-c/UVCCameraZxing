@@ -81,8 +81,13 @@ public class MainActivity extends AppCompatActivity {
 	 * @param data
 	 */
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
 		super.onActivityResult(requestCode, resultCode, data);
+
+		Intent caller_intent = getIntent();
+//		Log.w(TAG, "qrcode: ");
+		Log.w("UVCCameraZxing", "MainActivity: We in the onActivityResult");
 
 		if (requestCode == REQUEST_QR_IMAGE) {
 			if (data != null) {
@@ -100,19 +105,35 @@ public class MainActivity extends AppCompatActivity {
 									.create()
 									.show();
 
-						}
+						}; /* onAnalyzeSuccess */
 
 						@Override
 						public void onAnalyzeFailed() {
-							Toast.makeText(MainActivity.this, (R.string.err_fail_parse/*"解析二维码失败"*/), Toast.LENGTH_LONG).show();
-						}
+							Toast.makeText(MainActivity.this, (R.string.err_fail_parse), Toast.LENGTH_LONG).show();
+						}; /* onAnalyzeFailed */
 					});
 				} catch (Exception e) {
 					e.printStackTrace();
-				}
-			}
-		}
-	}
+				}; /* catch Exception e */
+			}; /* if data != null */
+		}; /* if requestCode == REQUEST_QR_IMAGE */
+	}; /* onActivityResult */
+
+	/**
+	 * For Debug purposes only
+	 */
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		Log.w("UVCCameraZxing", "MainActivity: at the onDestroy call, for Debug only purposes");
+		Intent caller_intent = getIntent();
+		if (caller_intent == null)
+			Log.w("UVCCameraZxing", "onDestroy: We don't have a Caller Intent");
+		else
+			Log.w("UVCCameraZxing", "onDestroy: We have a Caller Intent");
+
+	}; /* onDestroy */
 
 	/**
 	 * actionbar: Add menu on the right
@@ -123,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_pic_select, menu);
 		return true;
-	}
+	}; /* onCreateOptionsMenu */
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -144,6 +165,6 @@ public class MainActivity extends AppCompatActivity {
 				break;
 		}
 		return super.onOptionsItemSelected(item);
-	}
+	}; /* onOptionsItemSelected */
 
-}
+}; /* MainActivity */

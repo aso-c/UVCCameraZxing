@@ -27,12 +27,12 @@
 <resources>
     <string name="app_name">USBCameraZxing</string>
     <string name="app_label">%1$s   == build ver.%2$s, by %3$s from %4$s ==</string>
-    <string name="app_version_name" translatable="false">v.2.40.2</string>
-    <string name="app_version_code" translatable="false">2.4002</string>
+    <string name="app_version_name" translatable="false">v.2.40.3.2</string>
+    <string name="app_version_code" translatable="false">2.400302</string>
     <string name="app_author" translatable="false">jp1017</string>
     <string name="app_contributor" translatable="false">aso</string>
-    <string name="build_date" translatable="false">20.05.21</string>
-    <string name="build_date_value" translatable="false">20210520</string>
+    <string name="build_date" translatable="false">25.05.21</string>
+    <string name="build_date_value" translatable="false">20210525</string>
     <string name="maven_build">${maven.build.timestamp}</string>
     <string name="app_menu_title">QR code recognition</string>
     <string name="err_fail_parse">Failed to parse QR code</string>
