@@ -1,4 +1,4 @@
-package com.serenegiant.usbcamerazxing;
+ package com.serenegiant.usbcamerazxing;
 /*
  * UVCCamera
  * library and sample to access to UVC web camera on non-rooted Android device
@@ -30,6 +30,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -128,16 +129,16 @@ public class MainActivity extends AppCompatActivity {
 	 * @param intent
 	 * @return
 	 */
-	public boolean isScannerClientCallerIntent(Intent intent)
+	public boolean isScannerClientCallerIntent(@NonNull String tag, Intent intent)
 	{
 		if (intent == null)
-			Log.w("UVCCameraZxing", "onDestroy: We don't have a Caller Intent");
+			Log.w("UVCCameraZxing", tag + ": We don't have a Caller Intent");
 		else {
-			Log.w("UVCCameraZxing", "onDestroy: We have a Caller Intent");
+			Log.w("UVCCameraZxing", tag + ": We have a Caller Intent");
 			if (!intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
-				Log.w("UVCCameraZxing", "onDestroy: We called from system launcher");
+				Log.w("UVCCameraZxing", tag + ": We called from system launcher");
 			else {
-				Log.w("UVCCameraZxing", "onDestroy: We called from external program for fetching result");
+				Log.w("UVCCameraZxing", tag + ": We called from external program for fetching result");
 				return true;
 			}; /* else if !intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN") */
 		}; /* if intent == null */
@@ -145,6 +146,30 @@ public class MainActivity extends AppCompatActivity {
 	}; /* isScannerClientCallerIntent */
 
 	private static final boolean MyDEBUG = true;
+	@Override
+	/**
+	 * For Debug purposes only
+	 */
+	protected void onPause() {
+		super.onPause();
+		if (MyDEBUG) {
+			Log.w("UVCCameraZxing", "MainActivity: at the onPause call, for Debug only purposes");
+			if (isScannerClientCallerIntent("onPause", getIntent()))
+			{
+				Log.w("UVCCameraZxing", "onPause: An example of a QR code string has been submitted.");
+				Intent intent = new Intent();
+				intent.setAction(Intent.ACTION_SEND);
+//				intent.putExtra("QRCode", "Example string for checking the scanning QR code result transmission.");
+				intent.putExtra("QRCode", "qqqq");
+				intent.setData(Uri.parse("www.sppp.qu/rda"));
+				setResult(RESULT_OK, intent);
+				finish();
+			}; /* if isScannerClientCallerIntent(getIntent()) */
+			//isScannerClientCallerIntent(getIntent());
+		}; /* if MyDEBUG */
+
+	}; /* onPause */
+
 	/**
 	 * For Debug purposes only
 	 */
@@ -154,15 +179,16 @@ public class MainActivity extends AppCompatActivity {
 
 		if (MyDEBUG) {
 			Log.w("UVCCameraZxing", "MainActivity: at the onDestroy call, for Debug only purposes");
-			if (isScannerClientCallerIntent(getIntent()))
-			{
-				Log.w("UVCCameraZxing", "onDestroy: An example of a QR code string has been submitted.");
-				Intent intent = new Intent();
-				intent.putExtra("QRCode", "Example string for checking the scanning QR code result transmission.");
-				setResult(RESULT_OK, intent);
-				finish();
-			}; /* if isScannerClientCallerIntent(getIntent()) */
-			//isScannerClientCallerIntent(getIntent());
+//			if (isScannerClientCallerIntent("onPause", getIntent()))
+//			{
+//				Log.w("UVCCameraZxing", "onDestroy: An example of a QR code string has been submitted.");
+//				Intent intent = new Intent();
+//				intent.putExtra("QRCode", "Example string for checking the scanning QR code result transmission.");
+//				intent.setData(Uri.parse("www.sppp.qu/rda"));
+//				this.setResult(RESULT_OK, intent);
+//				this.finish();
+//			}; /* if isScannerClientCallerIntent(getIntent()) */
+//			//isScannerClientCallerIntent(getIntent());
 		}; /* if MyDEBUG */
 
 	}; /* onDestroy */
