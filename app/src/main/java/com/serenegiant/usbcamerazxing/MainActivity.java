@@ -40,6 +40,7 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.serenegiant.utils.ImageUtil;
+import com.serenegiant.utils.ResultIntentUtil;
 import com.uuzuche.lib_zxing.CodeUtils;
 
 public class MainActivity extends AppCompatActivity {
@@ -154,15 +155,19 @@ public class MainActivity extends AppCompatActivity {
 		super.onPause();
 		if (MyDEBUG) {
 			Log.w("UVCCameraZxing", "MainActivity: at the onPause call, for Debug only purposes");
-			if (isScannerClientCallerIntent("onPause", getIntent()))
+			ResultIntentUtil.isCalling4ResultLog(getIntent(), "onPause");
+			//if (isScannerClientCallerIntent("onPause", getIntent()))
+			if (ResultIntentUtil.isCalling4Result(getIntent()))
 			{
 				Log.w("UVCCameraZxing", "onPause: An example of a QR code string has been submitted.");
-				Intent intent = new Intent();
-				intent.setAction(Intent.ACTION_SEND);
+//				Intent intent = new Intent();
+//				intent.setAction(Intent.ACTION_SEND);
 //				intent.putExtra("QRCode", "Example string for checking the scanning QR code result transmission.");
-				intent.putExtra("QRCode", "qqqq");
-				intent.setData(Uri.parse("www.sppp.qu/rda"));
-				setResult(RESULT_OK, intent);
+////				intent.putExtra("QRCode", "qqqq");
+//				intent.setData(Uri.parse("www.sppp.qu/rda"));
+//				setResult(RESULT_OK, intent);
+				setResult(RESULT_OK, ResultIntentUtil.createResult("Example string for checking the scanning QR code result transmission."));
+//				setResult(RESULT_OK, ResultIntentUtil.createResult("qqqq"));
 				finish();
 			}; /* if isScannerClientCallerIntent(getIntent()) */
 			//isScannerClientCallerIntent(getIntent());
