@@ -109,12 +109,33 @@ public class MainActivity extends AppCompatActivity {
 									.setPositiveButton("OK", null)
 									.create()
 									.show();
+							ResultIntentUtil.isCalling4ResultLog(getIntent(), "onActivityResult");
+
+							if (ResultIntentUtil.isCalling4Result(getIntent()))
+							{
+								Log.w("UVCCameraZxing", "onActivityResult: QR code recognize success.");
+								setResult(RESULT_OK, ResultIntentUtil.createResult(result));
+								finish();
+							}; /* if isScannerClientCallerIntent(getIntent()) */
 
 						}; /* onAnalyzeSuccess */
 
 						@Override
 						public void onAnalyzeFailed() {
 							Toast.makeText(MainActivity.this, (R.string.err_fail_parse), Toast.LENGTH_LONG).show();
+//------------------------------------------------------------------------------------------------------------
+							Log.w("UVCCameraZxing", "MainActivity: at the onActivityResult callback");
+							ResultIntentUtil.isCalling4ResultLog(getIntent(), "onActivityResult");
+							if (ResultIntentUtil.isCalling4Result(getIntent()))
+							{
+								Log.w("UVCCameraZxing", "onActivityResult: Failed to parse QR code.");
+								setResult(RESULT_CANCELED, ResultIntentUtil.createResult("< " + getString(R.string.err_fail_parse) + " >"));
+//								setResult(RESULT_OK, ResultIntentUtil.createResult("Example string for checking the scanning QR code result transmission."));
+//								setResult(RESULT_OK, ResultIntentUtil.createResult("qqqq"));
+								finish();
+							}; /* if isScannerClientCallerIntent(getIntent()) */
+//------------------------------------------------------------------------------------------------------------
+
 						}; /* onAnalyzeFailed */
 					});
 				} catch (Exception e) {
@@ -124,79 +145,51 @@ public class MainActivity extends AppCompatActivity {
 		}; /* if requestCode == REQUEST_QR_IMAGE */
 	}; /* onActivityResult */
 
-	/**
-	 * analyse of the caller intent parameters: is the program
-	 * called as an external client?
-	 * @param intent
-	 * @return
-	 */
-	public boolean isScannerClientCallerIntent(@NonNull String tag, Intent intent)
-	{
-		if (intent == null)
-			Log.w("UVCCameraZxing", tag + ": We don't have a Caller Intent");
-		else {
-			Log.w("UVCCameraZxing", tag + ": We have a Caller Intent");
-			if (!intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
-				Log.w("UVCCameraZxing", tag + ": We called from system launcher");
-			else {
-				Log.w("UVCCameraZxing", tag + ": We called from external program for fetching result");
-				return true;
-			}; /* else if !intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN") */
-		}; /* if intent == null */
-		return false;
-	}; /* isScannerClientCallerIntent */
 
-	private static final boolean MyDEBUG = true;
-	@Override
-	/**
-	 * For Debug purposes only
-	 */
-	protected void onPause() {
-		super.onPause();
-		if (MyDEBUG) {
-			Log.w("UVCCameraZxing", "MainActivity: at the onPause call, for Debug only purposes");
-			ResultIntentUtil.isCalling4ResultLog(getIntent(), "onPause");
-			//if (isScannerClientCallerIntent("onPause", getIntent()))
-			if (ResultIntentUtil.isCalling4Result(getIntent()))
-			{
-				Log.w("UVCCameraZxing", "onPause: An example of a QR code string has been submitted.");
-//				Intent intent = new Intent();
-//				intent.setAction(Intent.ACTION_SEND);
-//				intent.putExtra("QRCode", "Example string for checking the scanning QR code result transmission.");
-////				intent.putExtra("QRCode", "qqqq");
-//				intent.setData(Uri.parse("www.sppp.qu/rda"));
-//				setResult(RESULT_OK, intent);
-				setResult(RESULT_OK, ResultIntentUtil.createResult("Example string for checking the scanning QR code result transmission."));
-//				setResult(RESULT_OK, ResultIntentUtil.createResult("qqqq"));
-				finish();
-			}; /* if isScannerClientCallerIntent(getIntent()) */
-			//isScannerClientCallerIntent(getIntent());
-		}; /* if MyDEBUG */
+//	private static final boolean MyDEBUG = true;
 
-	}; /* onPause */
-
-	/**
-	 * For Debug purposes only
-	 */
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-
-		if (MyDEBUG) {
-			Log.w("UVCCameraZxing", "MainActivity: at the onDestroy call, for Debug only purposes");
-//			if (isScannerClientCallerIntent("onPause", getIntent()))
+//	@Override
+//	/**
+//	 * For Debug purposes only
+//	 */
+//	protected void onPause() {
+//		super.onPause();
+//		if (MyDEBUG) {
+//			Log.w("UVCCameraZxing", "MainActivity: at the onPause call, for Debug only purposes");
+//			ResultIntentUtil.isCalling4ResultLog(getIntent(), "onPause");
+//			if (ResultIntentUtil.isCalling4Result(getIntent()))
 //			{
-//				Log.w("UVCCameraZxing", "onDestroy: An example of a QR code string has been submitted.");
-//				Intent intent = new Intent();
-//				intent.putExtra("QRCode", "Example string for checking the scanning QR code result transmission.");
-//				intent.setData(Uri.parse("www.sppp.qu/rda"));
-//				this.setResult(RESULT_OK, intent);
-//				this.finish();
+//				Log.w("UVCCameraZxing", "onPause: An example of a QR code string has been submitted.");
+//				setResult(RESULT_OK, ResultIntentUtil.createResult("Example string for checking the scanning QR code result transmission."));
+////				setResult(RESULT_OK, ResultIntentUtil.createResult("qqqq"));
+//				finish();
 //			}; /* if isScannerClientCallerIntent(getIntent()) */
-//			//isScannerClientCallerIntent(getIntent());
-		}; /* if MyDEBUG */
+//		}; /* if MyDEBUG */
+//
+//	}; /* onPause */
 
-	}; /* onDestroy */
+//	/**
+//	 * For Debug purposes only
+//	 */
+//	@Override
+//	protected void onDestroy() {
+//		super.onDestroy();
+//
+//		if (MyDEBUG) {
+//			Log.w("UVCCameraZxing", "MainActivity: at the onDestroy call, for Debug only purposes");
+////			if (isScannerClientCallerIntent("onPause", getIntent()))
+////			{
+////				Log.w("UVCCameraZxing", "onDestroy: An example of a QR code string has been submitted.");
+////				Intent intent = new Intent();
+////				intent.putExtra("QRCode", "Example string for checking the scanning QR code result transmission.");
+////				intent.setData(Uri.parse("www.sppp.qu/rda"));
+////				this.setResult(RESULT_OK, intent);
+////				this.finish();
+////			}; /* if isScannerClientCallerIntent(getIntent()) */
+////			//isScannerClientCallerIntent(getIntent());
+//		}; /* if MyDEBUG */
+//
+//	}; /* onDestroy */
 
 	/**
 	 * actionbar: Add menu on the right
