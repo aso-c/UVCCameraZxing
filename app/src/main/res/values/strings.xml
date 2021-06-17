@@ -29,4 +29,7 @@
     <string name="app_label">%1$s   == build ver.%2$s, by %3$s from %4$s ==</string>
     <string name="app_menu_title">QR code recognition</string>
     <string name="err_fail_parse">Failed to parse QR code</string>
+    <string name="QRcode_found">Found the QR code: </string>
+    <string name="QRcode_Wrong">The QR code is wrong</string>
+    <string name="QRcode_Scan">Scan QR code</string>
 </resources>

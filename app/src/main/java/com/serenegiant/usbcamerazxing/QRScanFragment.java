@@ -108,14 +108,14 @@ public class QRScanFragment extends Fragment{
 	private ICameraClient mCameraClient;
 
 	private CameraViewInterface mCameraView;
-	private ImageView mImageView;               //扫描动画
-	private TranslateAnimation mAnimation;       //动画
+	private ImageView mImageView;				// Scan animation
+	private TranslateAnimation mAnimation;		// Animation
 
 	private static final int MESSAGE_QR_SUCCESS = 1;
 
-	private static final int SCAN_TIME = 16;            //到达扫描时间
-	private int time2Scan;   //设置要扫描二维码的时间
-	private String mQRString;   //二维码
+	private static final int SCAN_TIME = 16;	// Scan time reached
+	private int time2Scan;		// Set the time to scan the QR code
+	private String mQRString;	// QR code
 
 	private AlertDialog mDialog;
 
@@ -152,7 +152,7 @@ public class QRScanFragment extends Fragment{
 			public void handleMessage(Message msg) {
 				switch (msg.what) {
 					case MESSAGE_QR_SUCCESS:
-						Log.w(TAG, "扫描二维码: " + mQRString);
+						Log.w(TAG, getString(R.string.QRcode_Scan) + mQRString);
 
 						if (!TextUtils.isEmpty(mQRString)) {
 							if (mDialog != null) {
@@ -195,7 +195,7 @@ public class QRScanFragment extends Fragment{
 		mHandler.post(new Runnable() {
 			@Override
 			public void run() {
-				//设置动画
+				// Set up animation
 				mImageView.startAnimation(mAnimation);
 
 				mHandler.postDelayed(this, 4000);
@@ -329,7 +329,7 @@ public class QRScanFragment extends Fragment{
 		public void onSurfaceUpdate(Surface surface) {
 			time2Scan++;
 
-			//从TextureView获得　Bitmap
+			// Get Bitmap from TextureView
 			final Bitmap bitmap = ((TextureView) mCameraView).getBitmap();
 
 			if (time2Scan > SCAN_TIME) {
@@ -339,11 +339,11 @@ public class QRScanFragment extends Fragment{
 					@Override
 					public void run() {
 
-						//识别二维码／条形码
+						// Recognition of two-dimensional code/barcode
 						CodeUtils.analyzeBitmap(bitmap, new CodeUtils.AnalyzeCallback() {
 							@Override
 							public void onAnalyzeSuccess(Bitmap mBitmap, String result) {
-								Log.w(TAG, "发现二维码： " + result);
+								Log.w(TAG, getString(R.string.QRcode_found) + result);
 
 								mQRString = result;
 								mHandler.sendEmptyMessage(MESSAGE_QR_SUCCESS);
@@ -352,7 +352,7 @@ public class QRScanFragment extends Fragment{
 
 							@Override
 							public void onAnalyzeFailed() {
-								Log.w(TAG, "二维码有误");
+								Log.w(TAG, getString(R.string.QRcode_Wrong));
 							}
 						});
 					}
