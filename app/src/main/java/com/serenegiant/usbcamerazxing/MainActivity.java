@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
 		mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
-		//mToolbar.setTitle("二维码识别");
 		//mToolbar.setTitle("QR code recognition");
 		mToolbar.setTitle(R.string.app_menu_title);
 		//mToolbar.setTitle(R.string.app_name);
@@ -109,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
 									.setPositiveButton("OK", null)
 									.create()
 									.show();
-							ResultIntentUtil.isCalling4ResultLog(getIntent(), "onActivityResult");
 
+							ResultIntentUtil.isCalling4ResultLog(getIntent(), "onActivityResult");
 							if (ResultIntentUtil.isCalling4Result(getIntent()))
 							{
 								Log.w("UVCCameraZxing", "onActivityResult: QR code recognize success.");
@@ -123,18 +123,15 @@ public class MainActivity extends AppCompatActivity {
 						@Override
 						public void onAnalyzeFailed() {
 							Toast.makeText(MainActivity.this, (R.string.err_fail_parse), Toast.LENGTH_LONG).show();
-//------------------------------------------------------------------------------------------------------------
+
 							Log.w("UVCCameraZxing", "MainActivity: at the onActivityResult callback");
 							ResultIntentUtil.isCalling4ResultLog(getIntent(), "onActivityResult");
 							if (ResultIntentUtil.isCalling4Result(getIntent()))
 							{
 								Log.w("UVCCameraZxing", "onActivityResult: Failed to parse QR code.");
-								setResult(RESULT_CANCELED, ResultIntentUtil.createResult("< " + getString(R.string.err_fail_parse) + " >"));
-//								setResult(RESULT_OK, ResultIntentUtil.createResult("Example string for checking the scanning QR code result transmission."));
-//								setResult(RESULT_OK, ResultIntentUtil.createResult("qqqq"));
+								setResult(RESULT_CANCELED, ResultIntentUtil.createResult(String.format("< %1$s >", getString(R.string.err_fail_parse))));
 								finish();
 							}; /* if isScannerClientCallerIntent(getIntent()) */
-//------------------------------------------------------------------------------------------------------------
 
 						}; /* onAnalyzeFailed */
 					});
@@ -147,49 +144,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 //	private static final boolean MyDEBUG = true;
-
-//	@Override
-//	/**
-//	 * For Debug purposes only
-//	 */
-//	protected void onPause() {
-//		super.onPause();
-//		if (MyDEBUG) {
-//			Log.w("UVCCameraZxing", "MainActivity: at the onPause call, for Debug only purposes");
-//			ResultIntentUtil.isCalling4ResultLog(getIntent(), "onPause");
-//			if (ResultIntentUtil.isCalling4Result(getIntent()))
-//			{
-//				Log.w("UVCCameraZxing", "onPause: An example of a QR code string has been submitted.");
-//				setResult(RESULT_OK, ResultIntentUtil.createResult("Example string for checking the scanning QR code result transmission."));
-////				setResult(RESULT_OK, ResultIntentUtil.createResult("qqqq"));
-//				finish();
-//			}; /* if isScannerClientCallerIntent(getIntent()) */
-//		}; /* if MyDEBUG */
-//
-//	}; /* onPause */
-
-//	/**
-//	 * For Debug purposes only
-//	 */
-//	@Override
-//	protected void onDestroy() {
-//		super.onDestroy();
-//
-//		if (MyDEBUG) {
-//			Log.w("UVCCameraZxing", "MainActivity: at the onDestroy call, for Debug only purposes");
-////			if (isScannerClientCallerIntent("onPause", getIntent()))
-////			{
-////				Log.w("UVCCameraZxing", "onDestroy: An example of a QR code string has been submitted.");
-////				Intent intent = new Intent();
-////				intent.putExtra("QRCode", "Example string for checking the scanning QR code result transmission.");
-////				intent.setData(Uri.parse("www.sppp.qu/rda"));
-////				this.setResult(RESULT_OK, intent);
-////				this.finish();
-////			}; /* if isScannerClientCallerIntent(getIntent()) */
-////			//isScannerClientCallerIntent(getIntent());
-//		}; /* if MyDEBUG */
-//
-//	}; /* onDestroy */
 
 	/**
 	 * actionbar: Add menu on the right

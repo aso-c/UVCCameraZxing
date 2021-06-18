@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.serenegiant.usbcamerazxing.R;
+
 public class ResultIntentUtil {
 
     /**

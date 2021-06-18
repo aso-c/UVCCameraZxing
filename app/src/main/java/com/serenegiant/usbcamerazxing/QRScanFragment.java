@@ -92,6 +92,7 @@ import com.serenegiant.usb.DeviceFilter;
 import com.serenegiant.usb.USBMonitor;
 import com.serenegiant.usb.USBMonitor.OnDeviceConnectListener;
 import com.serenegiant.usb.USBMonitor.UsbControlBlock;
+import com.serenegiant.utils.ResultIntentUtil;
 import com.serenegiant.widget.CameraViewInterface;
 import com.uuzuche.lib_zxing.CodeUtils;
 
@@ -167,6 +168,16 @@ public class QRScanFragment extends Fragment{
 									.setPositiveButton("OK", null)
 									.create();
 									mDialog.show();
+
+									Activity my_activity = getActivity();
+							ResultIntentUtil.isCalling4ResultLog(my_activity.getIntent(), "onActivityResult");
+							if (ResultIntentUtil.isCalling4Result(my_activity.getIntent()))
+							{
+								Log.w("UVCCameraZxing", "onActivityResult: QR code recognize success.");
+								my_activity.setResult(Activity.RESULT_OK, ResultIntentUtil.createResult(mQRString));
+								my_activity.finish();
+							}; /* if isScannerClientCallerIntent(getIntent()) */
+
 						}
 						break;
 				}
@@ -351,8 +362,18 @@ public class QRScanFragment extends Fragment{
 							}
 
 							@Override
-							public void onAnalyzeFailed() {
+							public void onAnalyzeFailed()
+							{
 								Log.w(TAG, getString(R.string.QRcode_Wrong));
+								Log.w("UVCCameraZxing", "QRScanFragment: at the onSurfaceUpdate");
+								ResultIntentUtil.isCalling4ResultLog(getActivity().getIntent(), "onSurfaceUpdate");
+								if (ResultIntentUtil.isCalling4Result(getActivity().getIntent()))
+								{
+									Log.w("UVCCameraZxing", "onSurfaceUpdate: Failed to parse QR code.");
+									getActivity().setResult(Activity.RESULT_CANCELED, ResultIntentUtil.createResult(String.format("< %1$s >", getString(R.string.err_fail_parse))));
+									getActivity().finish();
+								}; /* if isScannerClientCallerIntent(getIntent()) */
+
 							}
 						});
 					}
