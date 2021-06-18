@@ -365,14 +365,14 @@ public class QRScanFragment extends Fragment{
 							public void onAnalyzeFailed()
 							{
 								Log.w(TAG, getString(R.string.QRcode_Wrong));
-								Log.w("UVCCameraZxing", "QRScanFragment: at the onSurfaceUpdate");
-								ResultIntentUtil.isCalling4ResultLog(getActivity().getIntent(), "onSurfaceUpdate");
-								if (ResultIntentUtil.isCalling4Result(getActivity().getIntent()))
-								{
-									Log.w("UVCCameraZxing", "onSurfaceUpdate: Failed to parse QR code.");
-									getActivity().setResult(Activity.RESULT_CANCELED, ResultIntentUtil.createResult(String.format("< %1$s >", getString(R.string.err_fail_parse))));
-									getActivity().finish();
-								}; /* if isScannerClientCallerIntent(getIntent()) */
+//								Log.w("UVCCameraZxing", "QRScanFragment: at the onSurfaceUpdate");
+//								ResultIntentUtil.isCalling4ResultLog(getActivity().getIntent(), "onSurfaceUpdate");
+//								if (ResultIntentUtil.isCalling4Result(getActivity().getIntent()))
+//								{
+//									Log.w("UVCCameraZxing", "onSurfaceUpdate: Failed to parse QR code.");
+//									getActivity().setResult(Activity.RESULT_CANCELED, ResultIntentUtil.createResult(String.format("< %1$s >", getString(R.string.err_fail_parse))));
+//									getActivity().finish();
+//								}; /* if isScannerClientCallerIntent(getIntent()) */
 
 							}
 						});
