@@ -28,8 +28,8 @@
 -->
 <resources>
     <!--<string name="app_label" translatable="false">%1$s   == build ver.%2$s, by %3$s from %4$s ==</string>-->
-    <string name="app_version_name" translatable="false">v.2.40.4.01</string>
-    <string name="app_version_code" translatable="false">2.400401</string>
+    <string name="app_version_name" translatable="false">v.2.40.5.00</string>
+    <string name="app_version_code" translatable="false">2.400500</string>
     <string name="app_author" translatable="false">jp1017</string>
     <string name="app_contributor" translatable="false">aso</string>
     <string name="build_date" translatable="false">17.06.21</string>
