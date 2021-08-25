@@ -291,9 +291,8 @@ public class QRScanFragment extends Fragment{
 		}
 
 		@Override
-		public void onCancel() {
-			if (DEBUG) Log.v(TAG, "OnDeviceConnectListener#onCancel:");
-		}
+//		public void onCancel() { if (DEBUG) Log.v(TAG, "OnDeviceConnectListener#onCancel:"); }
+		public void onCancel(UsbDevice device) { if (DEBUG) Log.v(TAG, "OnDeviceConnectListener#onCancel:"); }
 	};
 
 	private boolean updateCameraDialog() {

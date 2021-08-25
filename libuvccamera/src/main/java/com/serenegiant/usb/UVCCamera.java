@@ -1,27 +1,27 @@
-package com.serenegiant.usb;
 /*
- * UVCCamera
- * library and sample to access to UVC web camera on non-rooted Android device
+ *  UVCCamera
+ *  library and sample to access to UVC web camera on non-rooted Android device
  *
- * Copyright (c) 2014-2015 saki t_saki@serenegiant.com
+ * Copyright (c) 2014-2017 saki t_saki@serenegiant.com
  *
- * File name: UVCCamera.java
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *   You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *   Unless required by applicable law or agreed to in writing, software
+ *   distributed under the License is distributed on an "AS IS" BASIS,
+ *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *   See the License for the specific language governing permissions and
+ *   limitations under the License.
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- * All files in the folder are under this Apache License, Version 2.0.
- * Files in the jni/libjpeg, jni/libusb, jin/libuvc, jni/rapidjson folder may have a different license, see the respective files.
-*/
+ *  All files in the folder are under this Apache License, Version 2.0.
+ *  Files in the libjpeg-turbo, libusb, libuvc, rapidjson folder
+ *  may have a different license, see the respective files.
+ */
+
+package com.serenegiant.usb;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,6 +116,7 @@ public class UVCCamera {
 	private static boolean isLoaded;
 	static {
 		if (!isLoaded) {
+			System.loadLibrary("jpeg-turbo1500");
 			System.loadLibrary("usb100");
 			System.loadLibrary("uvc");
 			System.loadLibrary("UVCCamera");
@@ -126,9 +127,11 @@ public class UVCCamera {
 	private UsbControlBlock mCtrlBlock;
     protected long mControlSupports;			// カメラコントロールでサポートしている機能フラグ
     protected long mProcSupports;				// プロセッシングユニットでサポートしている機能フラグ
-    protected int mCurrentPreviewMode = 0;
-	protected int mCurrentPreviewWidth = DEFAULT_PREVIEW_WIDTH, mCurrentPreviewHeight = DEFAULT_PREVIEW_HEIGHT;
+    protected int mCurrentFrameFormat = FRAME_FORMAT_MJPEG;
+	protected int mCurrentWidth = DEFAULT_PREVIEW_WIDTH, mCurrentHeight = DEFAULT_PREVIEW_HEIGHT;
+	protected float mCurrentBandwidthFactor = DEFAULT_BANDWIDTH;
     protected String mSupportedSize;
+    protected List<Size> mCurrentSizeList;
 	// these fields from here are accessed from native code and do not change name and remove
     protected long mNativePtr;
     protected int mScanningModeMin, mScanningModeMax, mScanningModeDef;
@@ -183,12 +186,23 @@ public class UVCCamera {
      * USB permission is necessary before this method is called
      * @param ctrlBlock
      */
-    public void open(final UsbControlBlock ctrlBlock) {
-		mCtrlBlock = ctrlBlock;
-		nativeConnect(mNativePtr,
-			mCtrlBlock.getVenderId(), mCtrlBlock.getProductId(),
-			mCtrlBlock.getFileDescriptor(),
-			getUSBFSName(mCtrlBlock));
+    public synchronized void open(final UsbControlBlock ctrlBlock) {
+    	int result;
+    	try {
+			mCtrlBlock = ctrlBlock.clone();
+			result = nativeConnect(mNativePtr,
+				mCtrlBlock.getVenderId(), mCtrlBlock.getProductId(),
+				mCtrlBlock.getFileDescriptor(),
+				mCtrlBlock.getBusNum(),
+				mCtrlBlock.getDevNum(),
+				getUSBFSName(mCtrlBlock));
+		} catch (final Exception e) {
+			Log.w(TAG, e);
+			result = -1;
+		}
+		if (result != 0) {
+			throw new UnsupportedOperationException("open failed:result=" + result);
+		}
     	if (mNativePtr != 0 && TextUtils.isEmpty(mSupportedSize)) {
     		mSupportedSize = nativeGetSupportedSize(mNativePtr);
     	}
@@ -219,14 +233,22 @@ public class UVCCamera {
     /**
      * close and release UVC camera
      */
-    public void close() {
+    public synchronized void close() {
     	stopPreview();
     	if (mNativePtr != 0) {
     		nativeRelease(mNativePtr);
+//    		mNativePtr = 0;	// nativeDestroyを呼ぶのでここでクリアしちゃダメ
     	}
-   		mCtrlBlock = null;
+    	if (mCtrlBlock != null) {
+			mCtrlBlock.close();
+   			mCtrlBlock = null;
+		}
 		mControlSupports = mProcSupports = 0;
-		mCurrentPreviewMode = -1;
+		mCurrentFrameFormat = -1;
+		mCurrentBandwidthFactor = 0;
+		mSupportedSize = null;
+		mCurrentSizeList = null;
+    	if (DEBUG) Log.v(TAG, "close:finished");
     }
 
 	public UsbDevice getDevice() {
@@ -249,8 +271,8 @@ public class UVCCamera {
 		Size result = null;
 		final List<Size> list = getSupportedSizeList();
 		for (final Size sz: list) {
-			if ((sz.width == mCurrentPreviewWidth)
-				|| (sz.height == mCurrentPreviewHeight)) {
+			if ((sz.width == mCurrentWidth)
+				|| (sz.height == mCurrentHeight)) {
 				result =sz;
 				break;
 			}
@@ -264,28 +286,28 @@ public class UVCCamera {
 	   @param height
 	 */
 	public void setPreviewSize(final int width, final int height) {
-		setPreviewSize(width, height, DEFAULT_PREVIEW_MIN_FPS, DEFAULT_PREVIEW_MAX_FPS, mCurrentPreviewMode, 0);
+		setPreviewSize(width, height, DEFAULT_PREVIEW_MIN_FPS, DEFAULT_PREVIEW_MAX_FPS, mCurrentFrameFormat, mCurrentBandwidthFactor);
 	}
 
 	/**
 	 * Set preview size and preview mode
 	 * @param width
-	   @param height
-	   @param mode 0:yuyv, other:MJPEG
+	 * @param height
+	 * @param frameFormat either FRAME_FORMAT_YUYV(0) or FRAME_FORMAT_MJPEG(1)
 	 */
-	public void setPreviewSize(final int width, final int height, final int mode) {
-		setPreviewSize(width, height, DEFAULT_PREVIEW_MIN_FPS, DEFAULT_PREVIEW_MAX_FPS, mode, 0);
+	public void setPreviewSize(final int width, final int height, final int frameFormat) {
+		setPreviewSize(width, height, DEFAULT_PREVIEW_MIN_FPS, DEFAULT_PREVIEW_MAX_FPS, frameFormat, mCurrentBandwidthFactor);
 	}
 	
 	/**
 	 * Set preview size and preview mode
 	 * @param width
 	   @param height
-	   @param mode 0:yuyv, other:MJPEG
+	   @param frameFormat either FRAME_FORMAT_YUYV(0) or FRAME_FORMAT_MJPEG(1)
 	   @param bandwidth [0.0f,1.0f]
 	 */
-	public void setPreviewSize(final int width, final int height, final int mode, final float bandwidth) {
-		setPreviewSize(width, height, DEFAULT_PREVIEW_MIN_FPS, DEFAULT_PREVIEW_MAX_FPS, mode, bandwidth);
+	public void setPreviewSize(final int width, final int height, final int frameFormat, final float bandwidth) {
+		setPreviewSize(width, height, DEFAULT_PREVIEW_MIN_FPS, DEFAULT_PREVIEW_MAX_FPS, frameFormat, bandwidth);
 	}
 
 	/**
@@ -294,24 +316,25 @@ public class UVCCamera {
 	 * @param height
 	 * @param min_fps
 	 * @param max_fps
-	 * @param mode
-	 * @param bandwidth
+	 * @param frameFormat either FRAME_FORMAT_YUYV(0) or FRAME_FORMAT_MJPEG(1)
+	 * @param bandwidthFactor
 	 */
-	public void setPreviewSize(final int width, final int height, final int min_fps, final int max_fps, final int mode, final float bandwidth) {
+	public void setPreviewSize(final int width, final int height, final int min_fps, final int max_fps, final int frameFormat, final float bandwidthFactor) {
 		if ((width == 0) || (height == 0))
 			throw new IllegalArgumentException("invalid preview size");
 		if (mNativePtr != 0) {
-			final int result = nativeSetPreviewSize(mNativePtr, width, height, min_fps, max_fps, mode, bandwidth);
+			final int result = nativeSetPreviewSize(mNativePtr, width, height, min_fps, max_fps, frameFormat, bandwidthFactor);
 			if (result != 0)
 				throw new IllegalArgumentException("Failed to set preview size");
-			mCurrentPreviewMode = mode;
-			mCurrentPreviewWidth = width;
-			mCurrentPreviewHeight = height;
+			mCurrentFrameFormat = frameFormat;
+			mCurrentWidth = width;
+			mCurrentHeight = height;
+			mCurrentBandwidthFactor = bandwidthFactor;
 		}
 	}
 
 	public List<Size> getSupportedSizeList() {
-		final int type = (mCurrentPreviewMode > 0) ? 6 : 4;
+		final int type = (mCurrentFrameFormat > 0) ? 6 : 4;
 		return getSupportedSize(type, mSupportedSize);
 	}
 
@@ -324,23 +347,26 @@ public class UVCCamera {
 			final int format_nums = formats.length();
 			for (int i = 0; i < format_nums; i++) {
 				final JSONObject format = formats.getJSONObject(i);
-				final int format_type = format.getInt("type");
-				if ((format_type == type) || (type == -1)) {
-					addSize(format, format_type, result);
+				if(format.has("type") && format.has("size")) {
+					final int format_type = format.getInt("type");
+					if ((format_type == type) || (type == -1)) {
+						addSize(format, format_type, 0, result);
+					}
 				}
 			}
 		} catch (final JSONException e) {
+			e.printStackTrace();
 		}
 		return result;
 	}
 
-	private static final void addSize(final JSONObject format, final int type, final List<Size> size_list) throws JSONException {
+	private static final void addSize(final JSONObject format, final int formatType, final int frameType, final List<Size> size_list) throws JSONException {
 		final JSONArray size = format.getJSONArray("size");
 		final int size_nums = size.length();
 		for (int j = 0; j < size_nums; j++) {
 			final String[] sz = size.getString(j).split("x");
 			try {
-				size_list.add(new Size(type, j, Integer.parseInt(sz[0]), Integer.parseInt(sz[1])));
+				size_list.add(new Size(formatType, frameType, j, Integer.parseInt(sz[0]), Integer.parseInt(sz[1])));
 			} catch (final Exception e) {
 				break;
 			}
@@ -352,7 +378,7 @@ public class UVCCamera {
      * you can use SurfaceHolder came from SurfaceView/GLSurfaceView
      * @param holder
      */
-    public void setPreviewDisplay(final SurfaceHolder holder) {
+    public synchronized void setPreviewDisplay(final SurfaceHolder holder) {
    		nativeSetPreviewDisplay(mNativePtr, holder.getSurface());
     }
 
@@ -361,7 +387,7 @@ public class UVCCamera {
      * this method require API >= 14
      * @param texture
      */
-    public void setPreviewTexture(final SurfaceTexture texture) {	// API >= 11
+    public synchronized void setPreviewTexture(final SurfaceTexture texture) {	// API >= 11
     	final Surface surface = new Surface(texture);	// XXX API >= 14
     	nativeSetPreviewDisplay(mNativePtr, surface);
     }
@@ -370,7 +396,7 @@ public class UVCCamera {
      * set preview surface with Surface
      * @param surface
      */
-    public void setPreviewDisplay(final Surface surface) {
+    public synchronized void setPreviewDisplay(final Surface surface) {
     	nativeSetPreviewDisplay(mNativePtr, surface);
     }
 
@@ -388,7 +414,7 @@ public class UVCCamera {
     /**
      * start preview
      */
-    public void startPreview() {
+    public synchronized void startPreview() {
     	if (mCtrlBlock != null) {
     		nativeStartPreview(mNativePtr);
     	}
@@ -397,7 +423,7 @@ public class UVCCamera {
     /**
      * stop preview
      */
-    public void stopPreview() {
+    public synchronized void stopPreview() {
     	setFrameCallback(null, 0);
     	if (mCtrlBlock != null) {
     		nativeStopPreview(mNativePtr);
@@ -407,7 +433,7 @@ public class UVCCamera {
     /**
      * destroy UVCCamera object
      */
-    public void destroy() {
+    public synchronized void destroy() {
     	close();
     	if (mNativePtr != 0) {
     		nativeDestroy(mNativePtr);
@@ -1006,7 +1032,7 @@ public class UVCCamera {
     private final native long nativeCreate();
     private final native void nativeDestroy(final long id_camera);
 
-    private static final native int nativeConnect(final long id_camera, final int venderId, final int productId, final int fileDescriptor, String usbfs);
+    private final native int nativeConnect(long id_camera, int venderId, int productId, int fileDescriptor, int busNum, int devAddr, String usbfs);
     private static final native int nativeRelease(final long id_camera);
 
 	private static final native int nativeSetStatusCallback(final long mNativePtr, final IStatusCallback callback);
