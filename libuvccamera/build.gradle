@@ -24,7 +24,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: new File(buildDir, 'libs'), include: '*.jar')
+    implementation fileTree(dir: new File(buildDir, 'libs'), include: '*.jar')
 }
 
 /*tasks.withType(JavaCompile) {

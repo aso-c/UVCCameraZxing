@@ -84,6 +84,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 
+import com.serenegiant.app.UVCApplication;
 import com.serenegiant.serviceclient.CameraClient;
 import com.serenegiant.serviceclient.ICameraClient;
 import com.serenegiant.serviceclient.ICameraClientCallback;
@@ -169,10 +170,11 @@ public class QRScanFragment extends Fragment{
 									mDialog.show();
 
 									Activity my_activity = getActivity();
-							ResultIntentUtil.isCalled4ResultLog(my_activity.getIntent(), "onActivityResult");
-							if (ResultIntentUtil.isCalled4Result(my_activity.getIntent()))
+							ResultIntentUtil.setTag("onActivityResult");
+							if (ResultIntentUtil.isCalled4ResultLog(my_activity.getIntent()))
 							{
 								Log.w("UVCCameraZxing", "onActivityResult: QR code recognize success.");
+//								my_activity.setResult(Activity.RESULT_OK, ResultIntentUtil.createResult(my_activity.getIntent(), mQRString));
 								my_activity.setResult(Activity.RESULT_OK, ResultIntentUtil.createResult(my_activity.getIntent(), mQRString));
 								my_activity.finish();
 							}; /* if isScannerClientCallerIntent(getIntent()) */

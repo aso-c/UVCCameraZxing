@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
 									.create()
 									.show();
 
-							ResultIntentUtil.isCalled4ResultLog(getIntent(), "onActivityResult");
-							if (ResultIntentUtil.isCalled4Result(getIntent()))
+							ResultIntentUtil.setTag("onActivityResult");
+							if (ResultIntentUtil.isCalled4ResultLog(getIntent()))
 							{
 								Log.w("UVCCameraZxing", "onActivityResult: QR code recognize success.");
 								setResult(RESULT_OK, ResultIntentUtil.createResult(getIntent(), result));
@@ -123,8 +123,8 @@ public class MainActivity extends AppCompatActivity {
 							Toast.makeText(MainActivity.this, (R.string.err_fail_parse), Toast.LENGTH_LONG).show();
 
 							Log.w("UVCCameraZxing", "MainActivity: at the onActivityResult callback");
-							ResultIntentUtil.isCalled4ResultLog(getIntent(), "onActivityResult");
-							if (ResultIntentUtil.isCalled4Result(getIntent()))
+							ResultIntentUtil.setTag("onActivityResult");
+							if (ResultIntentUtil.isCalled4ResultLog(getIntent()))
 							{
 								Log.w("UVCCameraZxing", "onActivityResult: Failed to parse QR code.");
 								setResult(RESULT_CANCELED, ResultIntentUtil.createResult(getIntent(), String.format("< %1$s >", getString(R.string.err_fail_parse))));
