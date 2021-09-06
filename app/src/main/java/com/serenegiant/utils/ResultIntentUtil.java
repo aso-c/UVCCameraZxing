@@ -3,6 +3,7 @@ package com.serenegiant.utils;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Button;
 
 import com.serenegiant.app.UVCApplication;
 
@@ -35,17 +36,45 @@ public class ResultIntentUtil {
      * @param intent, tag
      * @return Boolean
      */
-    public static void isCalled4ResultLog(Intent intent, @NonNull String tag)
+//    public static void isCalled4ResultLog(Intent intent)
+    public static Boolean isCalled4ResultLog(Intent intent)
     {
         if (intent == null)
-            Log.w("UVCCameraZxing", tag + ": We don't have a Caller Intent");
+            Log.w("UVCCameraZxing", inner_tag + ": We don't have a Caller Intent");
         else {
-            Log.w("UVCCameraZxing", tag + ": We have a Caller Intent");
-//            if (intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
-            if (isCalled4Result(intent))
-                Log.w("UVCCameraZxing", tag + ": We called from external program for fetching result");
-            else Log.w("UVCCameraZxing", tag + ": We called from system launcher");
+            Log.w("UVCCameraZxing", inner_tag + ": We have a Caller Intent");
+            if (intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
+//            if (isCalled4Result(intent))
+            {
+                Log.w("UVCCameraZxing", inner_tag + ": We called from external program for fetching result");
+                return true;
+            }
+            else Log.w("UVCCameraZxing", inner_tag + ": We called from system launcher");
         }; /* else if intent == null */
+        return false;
+    }; /* isCalled4ResultLog */
+
+    /**
+     * analyse & logging analyse result of the caller intent parameters:
+     * is the program called as an external client?
+     * set inner_tag by tag
+     * @param intent, tag
+     * @return Boolean
+     */
+//    public static void isCalled4ResultLog(Intent intent, @NonNull String tag)
+    public static boolean isCalled4ResultLog(Intent intent, @NonNull String tag)
+    {
+        setTag(tag);
+        return isCalled4ResultLog(intent);
+//        if (intent == null)
+//            Log.w("UVCCameraZxing", tag + ": We don't have a Caller Intent");
+//        else {
+//            Log.w("UVCCameraZxing", tag + ": We have a Caller Intent");
+////            if (intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
+//            if (isCalled4Result(intent))
+//                Log.w("UVCCameraZxing", tag + ": We called from external program for fetching result");
+//            else Log.w("UVCCameraZxing", tag + ": We called from system launcher");
+//        }; /* else if intent == null */
     }; /* isCalled4ResultLog */
 
 
