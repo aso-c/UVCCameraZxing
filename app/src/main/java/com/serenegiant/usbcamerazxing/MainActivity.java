@@ -30,10 +30,8 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -110,11 +108,11 @@ public class MainActivity extends AppCompatActivity {
 									.create()
 									.show();
 
-							ResultIntentUtil.isCalling4ResultLog(getIntent(), "onActivityResult");
-							if (ResultIntentUtil.isCalling4Result(getIntent()))
+							ResultIntentUtil.isCalled4ResultLog(getIntent(), "onActivityResult");
+							if (ResultIntentUtil.isCalled4Result(getIntent()))
 							{
 								Log.w("UVCCameraZxing", "onActivityResult: QR code recognize success.");
-								setResult(RESULT_OK, ResultIntentUtil.createResult(result));
+								setResult(RESULT_OK, ResultIntentUtil.createResult(getIntent(), result));
 								finish();
 							}; /* if isScannerClientCallerIntent(getIntent()) */
 
@@ -125,11 +123,11 @@ public class MainActivity extends AppCompatActivity {
 							Toast.makeText(MainActivity.this, (R.string.err_fail_parse), Toast.LENGTH_LONG).show();
 
 							Log.w("UVCCameraZxing", "MainActivity: at the onActivityResult callback");
-							ResultIntentUtil.isCalling4ResultLog(getIntent(), "onActivityResult");
-							if (ResultIntentUtil.isCalling4Result(getIntent()))
+							ResultIntentUtil.isCalled4ResultLog(getIntent(), "onActivityResult");
+							if (ResultIntentUtil.isCalled4Result(getIntent()))
 							{
 								Log.w("UVCCameraZxing", "onActivityResult: Failed to parse QR code.");
-								setResult(RESULT_CANCELED, ResultIntentUtil.createResult(String.format("< %1$s >", getString(R.string.err_fail_parse))));
+								setResult(RESULT_CANCELED, ResultIntentUtil.createResult(getIntent(), String.format("< %1$s >", getString(R.string.err_fail_parse))));
 								finish();
 							}; /* if isScannerClientCallerIntent(getIntent()) */
 

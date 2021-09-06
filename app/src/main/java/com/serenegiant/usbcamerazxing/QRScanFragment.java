@@ -161,7 +161,6 @@ public class QRScanFragment extends Fragment{
 									return;
 								}
 							}
-
 							mDialog = new AlertDialog.Builder(getActivity())
 									.setTitle("Found QR")
 									.setMessage(mQRString)
@@ -170,21 +169,23 @@ public class QRScanFragment extends Fragment{
 									mDialog.show();
 
 									Activity my_activity = getActivity();
-							ResultIntentUtil.isCalling4ResultLog(my_activity.getIntent(), "onActivityResult");
-							if (ResultIntentUtil.isCalling4Result(my_activity.getIntent()))
+							ResultIntentUtil.isCalled4ResultLog(my_activity.getIntent(), "onActivityResult");
+							if (ResultIntentUtil.isCalled4Result(my_activity.getIntent()))
 							{
 								Log.w("UVCCameraZxing", "onActivityResult: QR code recognize success.");
-								my_activity.setResult(Activity.RESULT_OK, ResultIntentUtil.createResult(mQRString));
+								my_activity.setResult(Activity.RESULT_OK, ResultIntentUtil.createResult(my_activity.getIntent(), mQRString));
 								my_activity.finish();
 							}; /* if isScannerClientCallerIntent(getIntent()) */
-
 						}
 						break;
-				}
 
-			}
-		};
-	}
+					default:
+						;super.handleMessage(msg);
+				}; /* switch msg.what */
+			}; /* handleMessage */
+		}; /* Handler */
+	}; /* initHandler */
+
 
 	@Override
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {

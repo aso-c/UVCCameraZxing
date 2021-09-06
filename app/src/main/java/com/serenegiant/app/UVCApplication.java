@@ -44,15 +44,15 @@ package com.serenegiant.app;
 import android.app.Application;
 
 /**
- * 文 件 名: UVCApplication
- * 创 建 人: 蒋朋
- * 创建日期: 16-9-14 15:04
- * 邮    箱: jp19891017@gmail.com
- * 博    客: https://jp1017.github.io/
- * 描    述:
- * 修 改 人:
- * 修改时间：
- * 修改备注：
+ * file name: UVCApplication
+ * Creator: 蒋朋
+ *    Date: 16-9-14 15:04
+ *  E-mail: jp19891017@gmail.com
+ *     Url: https://jp1017.github.io/
+ * Describe:
+ *  Modify: aso
+ *    Date：
+ *    Note：
  */
 
 public class UVCApplication extends Application {
@@ -66,5 +66,11 @@ public class UVCApplication extends Application {
 
     public static UVCApplication getInstance() {
         return sInstance;
+    }
+
+    public static class Result
+    {
+        String name = "";
+        String name_default_value = "QRCode";
     }
 }

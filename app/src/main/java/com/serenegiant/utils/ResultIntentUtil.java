@@ -1,11 +1,10 @@
 package com.serenegiant.utils;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.serenegiant.usbcamerazxing.R;
+import com.serenegiant.app.UVCApplication;
 
 public class ResultIntentUtil {
 
@@ -15,7 +14,7 @@ public class ResultIntentUtil {
      * @param intent, tag
      * @return Boolean
      */
-    public static boolean isCalling4Result(Intent intent)
+    public static boolean isCalled4Result(Intent intent)
     {
         if (intent != null)
             if (intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
@@ -24,6 +23,11 @@ public class ResultIntentUtil {
 
     }; /* isCalling4Result */
 
+    static private String inner_tag = null;
+
+    public static void setTag(String tag) {
+        inner_tag = tag;
+    }
 
     /**
      * analyse & logging analyse result of the caller intent parameters:
@@ -31,28 +35,54 @@ public class ResultIntentUtil {
      * @param intent, tag
      * @return Boolean
      */
-    public static void isCalling4ResultLog(Intent intent, @NonNull String tag)
+    public static void isCalled4ResultLog(Intent intent, @NonNull String tag)
     {
         if (intent == null)
             Log.w("UVCCameraZxing", tag + ": We don't have a Caller Intent");
         else {
             Log.w("UVCCameraZxing", tag + ": We have a Caller Intent");
-            if (intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
+//            if (intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
+            if (isCalled4Result(intent))
                 Log.w("UVCCameraZxing", tag + ": We called from external program for fetching result");
             else Log.w("UVCCameraZxing", tag + ": We called from system launcher");
         }; /* else if intent == null */
-    }; /* isScannerClientCallerIntent */
+    }; /* isCalled4ResultLog */
 
 
-    public static Intent createResult(@NonNull String code)
+    public static Intent createResult(@NonNull Intent callIntent, @NonNull String code)
     {
+        String name = callIntent.getStringExtra("ResultName");
+        if (name == null)
+            name = "QRCode";
+        if (name.isEmpty())
+            name = "QRCode";
+
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);
-        intent.putExtra("QRCode", code);
-        intent.setData(Uri.parse("www.sppp.qu/rda"));
+//        intent.putExtra("QRCode", code);
+        intent.putExtra(name, code);
+//        intent.setData(Uri.parse("www.sppp.qu/rda"));
         //setResult(RESULT_OK, intent);
         //finish();
         return intent;
     }; /* createResult */
+
+    static private Intent keptIntent;
+
+    public static Intent createResult(@NonNull String code)
+    {
+        String name = keptIntent.getStringExtra("ResultName");
+        if (name == null)
+            name = "QRCode";
+        if (name.isEmpty())
+            name = "QRCode";
+
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+//        intent.putExtra("QRCode", code);
+        intent.putExtra(name, code);
+        return intent;
+    }; /* createResult */
+
 
 }; /* ResultIntentUtil */

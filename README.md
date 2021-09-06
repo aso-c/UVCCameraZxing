@@ -4,12 +4,30 @@ QR code recognition with USB serial camera
 [![Build Status](https://travis-ci.org/jp1017/UVCCameraZxing.svg?branch=master)](https://travis-ci.org/jp1017/UVCCameraZxing)
 
 ## 2.40.5
-Released sending a response intent with a recognized QR code string.
-Code snippet for calling UVCCameraZXing for receive recognized QR-code string:
+Implemented sending a response intent when the program is started by the calling application
+to get the scan result.
+
+Additions in app/src/main/AndroidManifest.xml file:
+
+        <application
+            ... >
+            <activity
+                android:name="com.serenegiant.usbcamerazxing.MainActivity"
+                ... >
+                ...
+    +            <intent-filter>
+    +                <action android:name="com.serenegiant.usbcamerazxing.SCAN"/>
+    +                <category android:name="android.intent.category.DEFAULT"/>
+    +            </intent-filter>
+                ...
+            </activity>
+        </application>
+
+Code snippet for calling UVCCameraZXing to get the recognized QR-code string:
 
     Intent intent = new Intent("com.serenegiant.usbcamerazxing.SCAN");
     startActivityForResult(intent, QR.Request.Code);
-    
+
 Code example for receiving returned intent:
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -24,7 +42,6 @@ Code example for receiving returned intent:
     }
 
 
- 
 
 ## 2.40.1
 Base translation interfase to english
