@@ -28,11 +28,11 @@
 -->
 <resources>
     <!--<string name="app_label" translatable="false">%1$s   == build ver.%2$s, by %3$s from %4$s ==</string>-->
-    <string name="app_version_name" translatable="false">v.2.40.8.00</string>
-    <string name="app_version_code" translatable="false">2.400800</string>
+    <string name="app_version_name" translatable="false">v.2.40.9.00</string>
+    <string name="app_version_code" translatable="false">2.400900</string>
     <string name="app_author" translatable="false">jp1017</string>
     <string name="app_contributor" translatable="false">aso</string>
-    <string name="build_date" translatable="false">06.09.21</string>
-    <string name="build_date_value" translatable="false">20210906</string>
+    <string name="build_date" translatable="false">07.09.21</string>
+    <string name="build_date_value" translatable="false">20210907</string>
     <string name="maven_build" translatable="false">${maven.build.timestamp}</string>
 </resources>

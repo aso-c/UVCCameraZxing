@@ -70,7 +70,15 @@ public class UVCApplication extends Application {
 
     public static class Result
     {
-        String name = "";
-        String name_default_value = "QRCode";
-    }
+
+        public static class Name {
+            public static final String VALUE = "ResultName";     // name of extra string in caller intent with scan result request that pass name of the result string
+            public static final String DEFAULT = "QRCode"/*"QRName"*/;  // default name of the scan result string in intent extra string
+        };; /* Name */
+
+        public static class Intent {
+            public static final String NAME = "com.serenegiant.usbcamerazxing.SCAN";
+        }; /* Intent */
+
+    }; /* Result */
 }
