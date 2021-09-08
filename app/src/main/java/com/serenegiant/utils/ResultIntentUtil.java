@@ -28,14 +28,13 @@ public class ResultIntentUtil {
             Log.w("UVCCameraZxing", inner_tag + ": We don't have a Caller Intent");
         else {
             Log.w("UVCCameraZxing", inner_tag + ": We have a Caller Intent");
-//            if (intent.getAction().equals("com.serenegiant.usbcamerazxing.SCAN"))
-            if (intent.getAction().equals(UVCApplication.Result.Intent.NAME))
-            {
+            if (!intent.getAction().equals(UVCApplication.Result.Intent.NAME)) {
+                Log.w("UVCCameraZxing", inner_tag + ": We called from system launcher");
+            } else {
                 Log.w("UVCCameraZxing", inner_tag + ": We called from external program for fetching result");
                 keptIntent = intent;
                 return true;
             }
-            else Log.w("UVCCameraZxing", inner_tag + ": We called from system launcher");
         }; /* else if intent == null */
         return false;
     }; /* isCalled4Result */
@@ -52,13 +51,9 @@ public class ResultIntentUtil {
      */
     public static Intent createResult(@NonNull String code)
     {
-//        String name = keptIntent.getStringExtra("ResultName");
         String name = keptIntent.getStringExtra(UVCApplication.Result.Name.VALUE);
         if (name == null || name.isEmpty())
-//            name = "QRCode";
             name = UVCApplication.Result.Name.DEFAULT;
-//        if (name.isEmpty())
-//            name = "QRCode";
 
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND);

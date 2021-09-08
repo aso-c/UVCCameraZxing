@@ -144,16 +144,13 @@ public class QRScanFragment extends Fragment{
 			mUSBMonitor.setDeviceFilter(filters);
 		}
 
-//		initHandler();
-//		mHandler = createHandler();
+	//		mHandler = createHandler();
 
 	}; /* onCreate */
 
 
-//	private void initHandler() {
 	private Handler createHandler() {
-
-		/*mHandler =*/ return new Handler(Looper.getMainLooper()) {
+		return new Handler(Looper.getMainLooper()) {
 			@Override
 			public void handleMessage(Message msg) {
 				switch (msg.what) {
@@ -208,7 +205,6 @@ public class QRScanFragment extends Fragment{
 		mAnimation.setDuration(4000);
 //        mAnimation.setFillAfter(true);
 
-//		initHandler();
 		mHandler = createHandler();
 
 		mHandler.post(new Runnable() {
@@ -220,7 +216,6 @@ public class QRScanFragment extends Fragment{
 				mHandler.postDelayed(this, 4000);
 			}
 		});
-
 		return rootView;
 	}; /* onCreateView */
 
