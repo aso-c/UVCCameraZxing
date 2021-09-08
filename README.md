@@ -3,6 +3,34 @@ QR code recognition with USB serial camera
 
 [![Build Status](https://travis-ci.org/jp1017/UVCCameraZxing.svg?branch=master)](https://travis-ci.org/jp1017/UVCCameraZxing)
 
+## 2.41
+Update scheme of interaction with caller program for get scan result.
+
+Updated code snippet for calling UVCCameraZXing with sending name of extra data for returning 
+recognized QR-code string:
+
+    Intent intent = new Intent("com.serenegiant.usbcamerazxing.SCAN");
+    intent.putExtra("ResultName", name_for_result);
+    startActivityForResult(intent, request_code);
+
+Code example for receiving returned intent:
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == QR.Request.Code) {
+            if (resultCode == RESULT_OK) {
+                String contents = intent.getStringExtra(name_for_result));
+                // Handle successful scan
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+            }
+        }
+    }
+
+If extra data with name "ResultName" is not defined in caller intent - UVCCameraZXing
+send result intent with name of result extra data is "QRCode".
+Constants with its names defined in classes UVCApplication.Name, UVCApplication.Intent.
+
+
 ## 2.40.5
 Implemented sending a response intent when the program is started by the calling application
 to get the scan result.
@@ -33,7 +61,7 @@ Code example for receiving returned intent:
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == QR.Request.Code) {
             if (resultCode == RESULT_OK) {
-                String contents = intent.intent.getStringExtra("QRCode"));
+                String contents = intent.getStringExtra("QRCode"));
                 // Handle successful scan
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
