@@ -70,6 +70,7 @@ import android.graphics.Bitmap;
 import android.hardware.usb.UsbDevice;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
@@ -143,12 +144,16 @@ public class QRScanFragment extends Fragment{
 			mUSBMonitor.setDeviceFilter(filters);
 		}
 
-		initHandler();
+//		initHandler();
+//		mHandler = createHandler();
 
-	}
+	}; /* onCreate */
 
-	private void initHandler() {
-		mHandler = new Handler() {
+
+//	private void initHandler() {
+	private Handler createHandler() {
+
+		/*mHandler =*/ return new Handler(Looper.getMainLooper()) {
 			@Override
 			public void handleMessage(Message msg) {
 				switch (msg.what) {
@@ -173,7 +178,6 @@ public class QRScanFragment extends Fragment{
 							if (ResultIntentUtil.isCalled4Result(my_activity.getIntent()))
 							{
 								Log.w("UVCCameraZxing", "onActivityResult: QR code recognize success.");
-//								my_activity.setResult(Activity.RESULT_OK, ResultIntentUtil.createResult(my_activity.getIntent(), mQRString));
 								my_activity.setResult(Activity.RESULT_OK, ResultIntentUtil.createResult(mQRString));
 								my_activity.finish();
 							}; /* if isScannerClientCallerIntent(getIntent()) */
@@ -185,6 +189,7 @@ public class QRScanFragment extends Fragment{
 				}; /* switch msg.what */
 			}; /* handleMessage */
 		}; /* Handler */
+
 	}; /* initHandler */
 
 
@@ -203,7 +208,8 @@ public class QRScanFragment extends Fragment{
 		mAnimation.setDuration(4000);
 //        mAnimation.setFillAfter(true);
 
-		initHandler();
+//		initHandler();
+		mHandler = createHandler();
 
 		mHandler.post(new Runnable() {
 			@Override
@@ -216,7 +222,7 @@ public class QRScanFragment extends Fragment{
 		});
 
 		return rootView;
-	}
+	}; /* onCreateView */
 
 	@Override
 	public void onResume() {
