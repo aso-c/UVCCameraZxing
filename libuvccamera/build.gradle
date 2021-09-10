@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+import org.apache.tools.ant.taskdefs.condition.Os
 
 android {
     compileSdkVersion 25
@@ -23,22 +24,27 @@ android {
 	}
 }
 
-dependencies {
-    implementation fileTree(dir: new File(buildDir, 'libs'), include: '*.jar')
-}
-
-/*tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile) {
 	compileTask -> compileTask.dependsOn ndkBuild
 }
 
 task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
 	println('executing ndkBuild')
-	def ndkBuildingDir = project.plugins.findPlugin('com.android.library').sdkHandler.getNdkFolder().absolutePath
-	def ndkBuildPath = ndkBuildingDir
-	if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-		ndkBuildPath = ndkBuildingDir + '/ndk-build.cmd'
-	} else {
-		ndkBuildPath = ndkBuildingDir + '/ndk-build'
-	}
+	Properties properties = new Properties()
+	properties.load(project.rootProject.file('local.properties').newDataInputStream())
+	def ndkBuildingDir = properties.getProperty("ndk.dir")
+//	def ndkBuildingDir = project.plugins.findPlugin('com.android.library').sdkHandler.getNdkFolder().absolutePath
+	//def ndkBuildPath = ndkBuildingDir
+//	if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+//		ndkBuildPath = ndkBuildingDir + '/ndk-build.cmd'
+//	} else {
+//		ndkBuildPath = ndkBuildingDir + '/ndk-build'
+//	}
+	def ndkBuildPath = ndkBuildingDir + '/ndk-build' + ((Os.isFamily(Os.FAMILY_WINDOWS))? '.cmd': '')
 	commandLine ndkBuildPath, '-j8', '-C', file('src/main').absolutePath
-}*/
+}
+
+dependencies {
+    implementation fileTree(dir: new File(buildDir, 'libs'), include: '*.jar')
+}
+

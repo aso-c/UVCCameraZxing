@@ -10,7 +10,7 @@ Updated code snippet for calling UVCCameraZXing with sending name of extra data 
 recognized QR-code string:
 
     Intent intent = new Intent("com.serenegiant.usbcamerazxing.SCAN");
-    intent.putExtra("ResultName", name_for_result);
+    intent.putExtra("ResultName", <name_for_result>);
     startActivityForResult(intent, request_code);
 
 Code example for receiving returned intent:
@@ -18,7 +18,7 @@ Code example for receiving returned intent:
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == QR.Request.Code) {
             if (resultCode == RESULT_OK) {
-                String contents = intent.getStringExtra(name_for_result));
+                String contents = intent.getStringExtra(<name_for_result>);
                 // Handle successful scan
             } else if (resultCode == RESULT_CANCELED) {
                 // Handle cancel
