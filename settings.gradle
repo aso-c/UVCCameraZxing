@@ -1,3 +1,4 @@
 include ':libuvccamera'
+include ':encoder'
 include ':lib-zxing'
 include ':app'

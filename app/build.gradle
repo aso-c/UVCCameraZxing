@@ -22,6 +22,7 @@ android {
 
 dependencies {
     implementation 'com.android.support:appcompat-v7:23.3.0'
+    implementation project(':encoder')
     implementation project(':libuvccamera')
     implementation project(':lib-zxing')
 }
