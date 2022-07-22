@@ -36,7 +36,7 @@ import com.serenegiant.usb.USBMonitor;
 import com.serenegiant.usb.USBMonitor.OnDeviceConnectListener;
 import com.serenegiant.usb.USBMonitor.UsbControlBlock;
 
-public class UVCService extends Service {
+public class UVCService extends Service {[]
 	private static final boolean DEBUG = true;
 	private static final String TAG = "UVCService";
 

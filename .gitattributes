@@ -1,0 +1,4 @@
+# Declare vendored & other options for linguia library
+libuvccamera/* linguist-vendored
+lib-zxing/* linguist-vendored
+
